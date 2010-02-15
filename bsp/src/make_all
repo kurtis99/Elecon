@@ -1,0 +1,24 @@
+#! /bin/sh
+# скрипт упрощающий сброку программ на моем бубнтии
+# информацию на тему разрисовывания консоли
+# http://www.dreamincode.net/forums/showtopic75171.htm 
+
+LOG_FILENAME=build.log
+ALL_STRING_PATH=../board/lib/strings/
+
+current_date=`date +"Время сборки %d-%m-%Y %R:%S"`
+# doesnt works, dont know why
+#current_date=$(date + "Время сборки %d-%m-%Y %r")
+
+recode -f utf8..cp1251 $ALL_STRING_PATH/AllStrings.cpp
+echo "\033[1;33;44m ---=$current_date=--- \033[0;;m" 
+echo "\033[1;33;44m $current_date \033[0;;m" >> $LOG_FILENAME
+if make all 2>> $LOG_FILENAME
+    then echo "\033[42;37mСборка проекта прошла без проблем\033[0;;m" >> $LOG_FILENAME
+    else echo "\033[41;37mВо время сборки случились критические ошибки!
+Но советую не паниковать, усокоиться, вспомнить тот факт что рано или
+поздно мы все умрем, взять себя в руки и приступить к решению проблем\033[0;;m" >> $LOG_FILENAME
+fi
+recode -f cp1251..utf8 $ALL_STRING_PATH/AllStrings.cpp
+
+exit 0
